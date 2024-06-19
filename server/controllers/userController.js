@@ -16,6 +16,9 @@ exports.register = async (req, res) => {
 };
 
 // Login
+
+
+
 exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -23,8 +26,17 @@ exports.login = async (req, res) => {
         if (!user) return res.status(401).json({ message: 'Invalid username or password' });
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword) return res.status(401).json({ message: 'Invalid username or password' });
-        const token = jwt.sign({ id: user._id }, 'secret_key');
-        res.json({ token });
+        const token = jwt.sign({ id: user._id }, 'secret_key', { expiresIn: '1h' });
+        
+        // Set the JWT as a cookie
+        res.cookie('token', token, {
+            httpOnly: true, // Prevents JavaScript access
+            secure: process.env.NODE_ENV === 'production', // Only send the cookie over HTTPS in production
+            maxAge: 3600000 // 1 hour
+        });
+
+        // Send user ID along with a success message
+        res.json({ message: 'Login successful', userId: user._id });
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

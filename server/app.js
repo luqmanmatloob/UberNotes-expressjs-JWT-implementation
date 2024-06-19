@@ -15,7 +15,6 @@ mongoose.connect('mongodb://localhost:27017/noteapp', { useNewUrlParser: true, u
 
 // Middleware
 app.use(bodyParser.json());
-
 app.use(express.static('public'));
 
 // JWT middleware
@@ -30,7 +29,7 @@ const verifyToken = (req, res, next) => {
 };
 
 // Routes
-app.use('/api/notes', verifyToken, noteRoutes);
+    app.use('/api/notes', verifyToken, noteRoutes);
 app.use('/api/users', userRoutes);
 
 // Start server

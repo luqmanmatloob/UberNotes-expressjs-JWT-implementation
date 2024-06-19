@@ -4,49 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note Taking App Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Note Taking App Test</h1>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md space-y-8 p-8 bg-gray-800 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-center">Note Taking App Test</h1>
 
-    <!-- Register Form -->
-    <h2>Register</h2>
-    <form id="registerForm">
-        <label for="registerUsername">Username:</label>
-        <input type="text" id="registerUsername" name="username" required>
-        <br>
-        <label for="registerPassword">Password:</label>
-        <input type="password" id="registerPassword" name="password" required>
-        <br>
-        <button type="submit">Register</button>
-    </form>
+        <!-- Register Form -->
+        <div>
+            <h2 class="text-2xl font-semibold">Register</h2>
+            <form id="registerForm" class="mt-4 space-y-4">
+                <div>
+                    <label for="registerUsername" class="block text-sm font-medium">Username:</label>
+                    <input type="text" id="registerUsername" name="username" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
+                </div>
+                <div>
+                    <label for="registerPassword" class="block text-sm font-medium">Password:</label>
+                    <input type="password" id="registerPassword" name="password" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Register</button>
+            </form>
+        </div>
 
-    <hr>
+        <hr class="border-gray-700">
 
-    <!-- Login Form -->
-    <h2>Login</h2>
-    <form id="loginForm">
-        <label for="loginUsername">Username:</label>
-        <input type="text" id="loginUsername" name="username" required>
-        <br>
-        <label for="loginPassword">Password:</label>
-        <input type="password" id="loginPassword" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-    </form>
+        <!-- Login Form -->
+        <div>
+            <h2 class="text-2xl font-semibold">Login</h2>
+            <form id="loginForm" class="mt-4 space-y-4">
+                <div>
+                    <label for="loginUsername" class="block text-sm font-medium">Username:</label>
+                    <input type="text" id="loginUsername" name="username" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
+                </div>
+                <div>
+                    <label for="loginPassword" class="block text-sm font-medium">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Login</button>
+            </form>
+        </div>
 
-    <hr>
+        <hr class="border-gray-700">
 
-    <!-- Create Note Form -->
-    <h2>Create Note</h2>
-    <form id="createNoteForm">
-        <label for="noteTitle">Title:</label>
-        <input type="text" id="noteTitle" name="title" required>
-        <br>
-        <label for="noteContent">Content:</label>
-        <textarea id="noteContent" name="content" required></textarea>
-        <br>
-        <button type="submit">Create Note</button>
-    </form>
+        <!-- Create Note Form -->
+        <div>
+            <h2 class="text-2xl font-semibold">Create Note</h2>
+            <form id="createNoteForm" class="mt-4 space-y-4">
+                <div>
+                    <label for="noteTitle" class="block text-sm font-medium">Title:</label>
+                    <input type="text" id="noteTitle" name="title" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
+                </div>
+                <div>
+                    <label for="noteContent" class="block text-sm font-medium">Content:</label>
+                    <textarea id="noteContent" name="content" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Create Note</button>
+            </form>
+        </div>
+    </div>
 
     <!-- JavaScript Code -->
     <script>
@@ -86,9 +101,10 @@
 
             const data = await response.json();
             if (response.ok) {
-                alert("Login successful. JWT token: " + data.token);
-                // Save token in a cookie
-                document.cookie = `jwtToken=${data.token}`;
+                alert("Login successful.");
+                // Save token and user ID in localStorage
+                localStorage.setItem('jwtToken', data.token);
+                localStorage.setItem('userId', data.userId);
             } else {
                 alert("Login failed. " + data.message);
             }
@@ -101,7 +117,7 @@
             const title = document.getElementById("noteTitle").value;
             const content = document.getElementById("noteContent").value;
 
-            const token = getCookie('jwtToken');
+            const token = localStorage.getItem('jwtToken');
             if (!token) {
                 alert("You need to log in to create a note.");
                 return;
@@ -123,18 +139,6 @@
                 alert("Failed to create note. " + data.message);
             }
         });
-
-        // Function to get a cookie by name
-        function getCookie(name) {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.trim().split('=');
-                if (cookieName === name) {
-                    return cookieValue;
-                }
-            }
-            return null;
-        }
     </script>
 </body>
 </html>
