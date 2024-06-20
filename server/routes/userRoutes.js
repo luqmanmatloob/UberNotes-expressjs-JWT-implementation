@@ -1,11 +1,99 @@
-const express = require('express');
-const router = express.Router();
-const userController = require('../controllers/userController');
+const express = require("express")
+const { UserModel } = require("../models/userModel")
+const salt = 5
+const userRouter = express.Router()
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
-// Register a new user
-router.post('/register', userController.register);
+userRouter.get("/", (req, res)=>{
+    res.send("All users")
+})
 
-// Login
-router.post('/login', userController.login);
+userRouter.post("/register", async(req, res)=>{
+    const {name, email, password} = req.body
+    bcrypt.hash(password, salt, async function(err, hash) {
+        if(err)
+            return res.send({message: "Something went wrong", status: 0})
+        try
+        {
+            let data = await UserModel.find({email})
+            if(data.length > 0)
+            {
+                res.send({
+                    message: "Email already exists!",
+                    status: 0
+                })
+            }
+            else
+            {
+                let user = new UserModel({name, email, password: hash})
+                await user.save()
+                res.send({
+                    message: "User created successfully",
+                    status: 1
+                })
+            }
+        }
+        catch(error)
+        {
+            res.send({
+                message: error.message,
+                status: 0
+            })
+        }
+    });
+})
 
-module.exports = router;
+userRouter.post("/login", async(req, res)=>{
+    const {email, password} = req.body
+    let option = {
+        expiresIn: "1d"
+    }
+    try
+    {
+        let data = await UserModel.find({email})
+        //console.log(data)
+        if(data.length > 0)
+        {
+            let token = jwt.sign({userID: data[0]._id}, "9283498324983823948", option);
+            bcrypt.compare(password, data[0].password, function(err, result)
+            {
+                if(err) return res.send({
+                    message: "Something went wrong: " + err,
+                    status: 0
+                })
+                if(result)
+                res.send({
+                    message: "Login successful",
+                    user: data[0].name,
+                    token: token,
+                    status: 1
+                })
+                else
+                res.send({
+                    message: "Incorrect password",
+                    status: 0
+                })
+            });
+        }
+        else
+        {
+            res.send({
+                message: "User does not exist",
+                status: 0
+            })
+        }
+    }
+    catch(error)
+    {
+        res.send({
+            message: error.message,
+            status: 0
+        })
+    }
+    
+})
+
+module.exports = {
+    userRouter
+}

@@ -1,38 +1,34 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const noteRoutes = require('./routes/noteRoutes');
-const userRoutes = require('./routes/userRoutes');
+const express = require("express")
+const cors = require("cors")
+const { connection } = require("./db")
+const { userRouter } = require("./routes/userRoutes")
+const { noteRouter } = require("./routes/noteRoutes")
+require("dotenv").config()
+const port = 3000
+const app = express()
 
-const app = express();
-const port = 3000;
-
-// Connect to MongoDB (replace 'your_connection_string' with your MongoDB connection string)
-mongoose.connect('mongodb://localhost:27017/noteapp', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
-
-// Middleware
-app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// JWT middleware
-const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization'];
-    if (!token) return res.status(401).json({ message: 'Unauthorized' });
-    jwt.verify(token, 'secret_key', (err, decoded) => {
-        if (err) return res.status(401).json({ message: 'Unauthorized' });
-        req.userId = decoded.id;
-        next();
-    });
-};
+app.use(cors())
+app.use(express.json())
+app.use("/user", userRouter)
+app.use("/note", noteRouter)
 
-// Routes
-    app.use('/api/notes', verifyToken, noteRoutes);
-app.use('/api/users', userRoutes);
+app.get("/", (req, res)=>{
+    res.send({
+        message: "API is working now"
+    })
+})
 
-// Start server
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+app.listen(port, async()=>{
+    try
+    {
+        await connection
+        console.log("DB connected")
+    }
+    catch(error)
+    {
+        console.log(error)
+    }
+    console.log(`Server is running on port ${port}`)
+})

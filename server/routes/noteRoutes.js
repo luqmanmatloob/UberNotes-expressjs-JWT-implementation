@@ -1,20 +1,80 @@
-const express = require('express');
-const router = express.Router();
-const noteController = require('../controllers/noteController');
+const express = require("express")
+const { NoteModel } = require("../models/noteModel")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const { authenticator } = require("../middleware/auth")
 
-// Create a new note
-router.post('/', noteController.createNote);
+const noteRouter = express.Router()
+noteRouter.use(authenticator)
 
-// Get all notes
-router.get('/', noteController.getAllNotes);
+noteRouter.get("/", async(req, res)=>{
+    let token = req.headers.authorization
+    jwt.verify(token, "your_secret_key", async(err, decode)=>{
+        try {
+            let data = await NoteModel.find({user:decode.userID})
+            res.send({
+                data: data,
+                message: "Successful",
+                status: 1
+            })
+        } catch (error) {
+            res.send({
+                message: error.message,
+                status: 0
+            })
+        }
+    })
+    
+})
 
-// Get a single note by id
-router.get('/:id', noteController.getNoteById);
+noteRouter.post("/create", async(req, res)=>{
+    try {
+        let note = new NoteModel(req.body)
+        await note.save()
+        res.send({
+            message: "Note created",
+            status: 1
+        })
+    } catch (error) {
+        res.send({
+            message: error.message,
+            status: 0
+        })
+    }
+})
 
-// Update a note by id
-router.put('/:id', noteController.updateNote);
+noteRouter.patch("/", async(req, res)=>{
+    let {id} = req.headers
+    try {
+        await NoteModel.findByIdAndUpdate({_id: id}, req.body)
+        res.send({
+            message: "Note updated",
+            status: 1
+        })
+    } catch (error) {
+        res.send({
+            message: error.message,
+            status: 0
+        })
+    }
+})
 
-// Delete a note by id
-router.delete('/:id', noteController.deleteNote);
+noteRouter.delete("/", async(req, res)=>{
+    let {id} = req.headers
+    try {
+        await NoteModel.findByIdAndDelete({_id: id})
+        res.send({
+            message: "Note deleted",
+            status: 1
+        })
+    } catch (error) {
+        res.send({
+            message: error.message,
+            status: 0
+        })
+    }
+})
 
-module.exports = router;
+module.exports = {
+    noteRouter
+}

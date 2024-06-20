@@ -3,142 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note Taking App Test</title>
+    <title>Note App</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md space-y-8 p-8 bg-gray-800 rounded-lg shadow-lg">
-        <h1 class="text-3xl font-bold text-center">Note Taking App Test</h1>
-
-        <!-- Register Form -->
-        <div>
-            <h2 class="text-2xl font-semibold">Register</h2>
-            <form id="registerForm" class="mt-4 space-y-4">
-                <div>
-                    <label for="registerUsername" class="block text-sm font-medium">Username:</label>
-                    <input type="text" id="registerUsername" name="username" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
-                </div>
-                <div>
-                    <label for="registerPassword" class="block text-sm font-medium">Password:</label>
-                    <input type="password" id="registerPassword" name="password" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Register</button>
-            </form>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-10">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold">Note App</h1>
         </div>
+        <div class="flex justify-center">
+            <div class="w-full max-w-xs">
+                <form id="registerForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <h2 class="mb-4 text-xl font-bold">Register</h2>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="registerName">Name</label>
+                        <input id="registerName" type="text" placeholder="Name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="registerEmail">Email</label>
+                        <input id="registerEmail" type="email" placeholder="Email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="registerPassword">Password</label>
+                        <input id="registerPassword" type="password" placeholder="Password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button type="button" onclick="register()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Register
+                        </button>
+                    </div>
+                </form>
 
-        <hr class="border-gray-700">
+                <form id="loginForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <h2 class="mb-4 text-xl font-bold">Login</h2>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="loginEmail">Email</label>
+                        <input id="loginEmail" type="email" placeholder="Email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="loginPassword">Password</label>
+                        <input id="loginPassword" type="password" placeholder="Password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button type="button" onclick="login()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Login
+                        </button>
+                    </div>
+                </form>
 
-        <!-- Login Form -->
-        <div>
-            <h2 class="text-2xl font-semibold">Login</h2>
-            <form id="loginForm" class="mt-4 space-y-4">
-                <div>
-                    <label for="loginUsername" class="block text-sm font-medium">Username:</label>
-                    <input type="text" id="loginUsername" name="username" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
+                <div id="notesSection" class="hidden bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                    <h2 class="mb-4 text-xl font-bold">Your Notes</h2>
+                    <div id="notesList" class="mb-4">
+                        <!-- Notes will be displayed here -->
+                    </div>
+                    <form id="createNoteForm">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="noteContent">New Note</label>
+                            <input id="noteContent" type="text" placeholder="Note content" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <button type="button" onclick="createNote()" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                Add Note
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <label for="loginPassword" class="block text-sm font-medium">Password:</label>
-                    <input type="password" id="loginPassword" name="password" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Login</button>
-            </form>
-        </div>
-
-        <hr class="border-gray-700">
-
-        <!-- Create Note Form -->
-        <div>
-            <h2 class="text-2xl font-semibold">Create Note</h2>
-            <form id="createNoteForm" class="mt-4 space-y-4">
-                <div>
-                    <label for="noteTitle" class="block text-sm font-medium">Title:</label>
-                    <input type="text" id="noteTitle" name="title" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded">
-                </div>
-                <div>
-                    <label for="noteContent" class="block text-sm font-medium">Content:</label>
-                    <textarea id="noteContent" name="content" required class="mt-1 p-2 w-full bg-gray-700 border border-gray-600 rounded"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">Create Note</button>
-            </form>
+            </div>
         </div>
     </div>
 
-    <!-- JavaScript Code -->
     <script>
-        // Register Form Submit Event
-        document.getElementById("registerForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
+        const apiUrl = "http://localhost:3000";
+        let token = '';
 
-            const username = document.getElementById("registerUsername").value;
+        function register() {
+            const name = document.getElementById("registerName").value;
+            const email = document.getElementById("registerEmail").value;
             const password = document.getElementById("registerPassword").value;
 
-            const response = await fetch('/api/users/register', {
-                method: 'POST',
+            fetch(`${apiUrl}/user/register`, {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ name, email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error("Error:", error);
             });
+        }
 
-            const data = await response.json();
-            alert(data.message);
-        });
-
-        // Login Form Submit Event
-        document.getElementById("loginForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
-
-            const username = document.getElementById("loginUsername").value;
+        function login() {
+            const email = document.getElementById("loginEmail").value;
             const password = document.getElementById("loginPassword").value;
 
-            const response = await fetch('/api/users/login', {
-                method: 'POST',
+            fetch(`${apiUrl}/user/login`, {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 1) {
+                    token = data.token;
+                    alert(data.message);
+                    document.getElementById("notesSection").classList.remove("hidden");
+                    loadNotes();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
             });
+        }
 
-            const data = await response.json();
-            if (response.ok) {
-                alert("Login successful.");
-                // Save token and user ID in localStorage
-                localStorage.setItem('jwtToken', data.token);
-                localStorage.setItem('userId', data.userId);
-            } else {
-                alert("Login failed. " + data.message);
-            }
-        });
+        function loadNotes() {
+            fetch(`${apiUrl}/note`, {
+                method: "GET",
+                headers: {
+                    "Authorization": token
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const notesList = document.getElementById("notesList");
+                notesList.innerHTML = "";
+                data.data.forEach(note => {
+                    const noteItem = document.createElement("div");
+                    noteItem.className = "mb-2 p-2 border rounded";
+                    noteItem.innerText = note.content;
+                    notesList.appendChild(noteItem);
+                });
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
 
-        // Create Note Form Submit Event
-        document.getElementById("createNoteForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
-
-            const title = document.getElementById("noteTitle").value;
+        function createNote() {
             const content = document.getElementById("noteContent").value;
 
-            const token = localStorage.getItem('jwtToken');
-            if (!token) {
-                alert("You need to log in to create a note.");
-                return;
-            }
-
-            const response = await fetch('/api/notes', {
-                method: 'POST',
+            fetch(`${apiUrl}/note/create`, {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
+                    "Content-Type": "application/json",
+                    "Authorization": token
                 },
-                body: JSON.stringify({ title, content })
+                body: JSON.stringify({ content })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 1) {
+                    loadNotes();
+                    document.getElementById("noteContent").value = "";
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
             });
-
-            const data = await response.json();
-            if (response.ok) {
-                alert("Note created successfully. Note ID: " + data._id);
-            } else {
-                alert("Failed to create note. " + data.message);
-            }
-        });
+        }
     </script>
 </body>
 </html>
