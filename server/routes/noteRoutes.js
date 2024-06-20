@@ -1,6 +1,5 @@
 const express = require("express")
 const { NoteModel } = require("../models/noteModel")
-const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { authenticator } = require("../middleware/auth")
 
@@ -9,7 +8,7 @@ noteRouter.use(authenticator)
 
 noteRouter.get("/", async(req, res)=>{
     let token = req.headers.authorization
-    jwt.verify(token, "your_secret_key", async(err, decode)=>{
+    jwt.verify(token, "9283498324983823948", async(err, decode)=>{
         try {
             let data = await NoteModel.find({user:decode.userID})
             res.send({
